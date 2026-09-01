@@ -1,0 +1,437 @@
+/* ─── Reset & base ─────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { height: 100%; background: #F2F2F2; }
+
+body {
+  font-family: var(--font-family);
+  font-size: var(--font-size-base);
+  color: var(--color-text);
+  background: #F2F2F2;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a { color: inherit; text-decoration: none; }
+ul { list-style: none; }
+button { font-family: inherit; cursor: pointer; border: none; outline: none; background: none; }
+input, select, textarea { font-family: inherit; }
+
+/* ─── Scrollbar ─────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 3px; height: 3px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(2,115,94,0.25); border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(2,115,94,0.50); }
+
+/* ─── Layout shell ──────────────────────────────────────────── */
+.app-shell {
+  display: flex;
+  min-height: 100vh;
+  overflow: hidden;
+  position: relative;
+  background-color: #F2F2F2;
+}
+
+/* ─── Sidebar ───────────────────────────────────────────────── */
+.sidebar {
+  width: var(--sidebar-width);
+  min-width: var(--sidebar-width);
+  height: 100vh;
+  background: #08261E;   /* Verde muy oscuro institucional Cámara */
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  transition: width 0.25s cubic-bezier(0.4,0,0.2,1),
+              min-width 0.25s cubic-bezier(0.4,0,0.2,1);
+  overflow: hidden;
+  z-index: 100;
+  border-right: 1px solid rgba(2,115,94,0.20);
+}
+
+.sidebar.collapsed {
+  width: var(--sidebar-width-collapsed);
+  min-width: var(--sidebar-width-collapsed);
+}
+
+/* ─── Main area ─────────────────────────────────────────────── */
+.main-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  height: 100vh;
+  overflow: hidden;
+  position: relative;
+  background: #F2F2F2;
+}
+
+/* ─── Header Notch (flotante) ─────────────────────────────── */
+.header {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 200;
+  width: auto;
+  min-width: 540px;
+  max-width: calc(100vw - 80px);
+  height: 56px;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(2,115,94,0.10);
+  border-radius: 30px;
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.8) inset,
+    0 4px 20px rgba(0,0,0,0.08),
+    0 1px 3px rgba(0,0,0,0.05);
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  gap: 10px;
+  animation: notchDrop 0.5s cubic-bezier(0.34,1.56,0.64,1) both;
+}
+
+/* ─── Content ─────────────────────────────────────────────── */
+.content {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 88px 16px 16px;
+}
+
+/* ─── Glassmorphism ─────────────────────────────────────────── */
+.glass {
+  background: rgba(255,255,255,0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(2,115,94,0.10);
+}
+
+/* ─── Bento Grid Responsivo ─────────────────────────────────── */
+.bento-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.bento-col-full {
+  grid-column: 1 / -1 !important;
+}
+
+/* ─── HUD Panel ─────────────────────────────────────────────── */
+.hud-panel {
+  position: relative;
+  background: rgba(255,255,255,0.94);
+  border: 1px solid rgba(2,115,94,0.10);
+  border-radius: 12px;
+  overflow: hidden;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+/* Línea escáner verde */
+.hud-panel::after {
+  content: '';
+  position: absolute;
+  top: -10%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--color-hud-accent), transparent);
+  opacity: 0.5;
+  animation: hudScan 4s ease-in-out infinite;
+  pointer-events: none;
+}
+.hud-panel::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 20%;
+  right: 20%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--color-hud-accent), transparent);
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+/* Variante Roja (alertas críticas) */
+.hud-panel.hud-red::before {
+  background: linear-gradient(90deg, transparent, #C53030, transparent);
+}
+.hud-panel.hud-red::after {
+  background: linear-gradient(90deg, transparent, #C53030, transparent);
+}
+
+/* Variante Verde (seguridad OK) */
+.hud-panel.hud-green::before {
+  background: linear-gradient(90deg, transparent, var(--color-primary), transparent);
+}
+.hud-panel.hud-green::after {
+  background: linear-gradient(90deg, transparent, var(--color-primary), transparent);
+}
+
+/* Variante Dorado (destacado) */
+.hud-panel.hud-gold::before {
+  background: linear-gradient(90deg, transparent, #D6D989, transparent);
+}
+.hud-panel.hud-gold::after {
+  background: linear-gradient(90deg, transparent, #D6D989, transparent);
+}
+
+/* Esquinas decorativas */
+.hud-corner {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border-color: var(--color-hud-accent);
+  border-style: solid;
+  opacity: 0.6;
+}
+.hud-corner.tl { top: 8px; left: 8px; border-width: 1.5px 0 0 1.5px; }
+.hud-corner.tr { top: 8px; right: 8px; border-width: 1.5px 1.5px 0 0; }
+.hud-corner.bl { bottom: 8px; left: 8px; border-width: 0 0 1.5px 1.5px; }
+.hud-corner.br { bottom: 8px; right: 8px; border-width: 0 1.5px 1.5px 0; }
+
+/* ─── Cámara Mockup — Live Feed ─────────────────────────────── */
+.cam-feed {
+  position: relative;
+  background: #0a1a14;
+  border-radius: 10px;
+  overflow: hidden;
+  aspect-ratio: 16/9;
+  border: 1px solid rgba(2,115,94,0.20);
+}
+.cam-feed::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(0,0,0,0.3) 0%, transparent 30%, transparent 70%, rgba(0,0,0,0.4) 100%);
+  z-index: 2;
+  pointer-events: none;
+}
+.cam-scanline {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(2,115,94,0.6), transparent);
+  animation: camScan 3s linear infinite;
+  z-index: 3;
+  pointer-events: none;
+}
+.cam-noise {
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.05'/%3E%3C/svg%3E");
+  background-size: 200px 200px;
+  opacity: 0.08;
+  animation: noiseAnim 0.5s steps(2) infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+.cam-offline-overlay {
+  position: absolute;
+  inset: 0;
+  background: #0a0a0a;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  z-index: 5;
+}
+.cam-rec-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: #C53030;
+  animation: pulse 1.2s ease-in-out infinite;
+}
+
+/* ─── Glow utilities ─────────────────────────────────────────── */
+.glow-primary { box-shadow: 0 0 20px rgba(2,115,94,0.25); }
+.glow-green   { box-shadow: 0 0 16px rgba(2,115,94,0.20); }
+.glow-red     { box-shadow: 0 0 16px rgba(197,48,48,0.25); }
+.glow-blue    { box-shadow: 0 0 16px rgba(43,108,176,0.20); }
+.glow-gold    { box-shadow: 0 0 16px rgba(214,217,137,0.30); }
+
+/* ─── Animations ─────────────────────────────────────────────── */
+@keyframes notchDrop {
+  from { opacity: 0; transform: translateX(-50%) translateY(-20px) scale(0.95); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
+}
+@keyframes hudScan {
+  0%   { top: -5%; opacity: 0; }
+  5%   { opacity: 0.7; }
+  95%  { opacity: 0.5; }
+  100% { top: 105%; opacity: 0; }
+}
+@keyframes camScan {
+  0%   { top: -2%; opacity: 0; }
+  5%   { opacity: 1; }
+  95%  { opacity: 0.8; }
+  100% { top: 102%; opacity: 0; }
+}
+@keyframes noiseAnim {
+  0%   { transform: translate(0, 0); }
+  50%  { transform: translate(-2%, -2%); }
+  100% { transform: translate(2%, 2%); }
+}
+@keyframes globeSpin { to { transform: rotate(360deg); } }
+@keyframes zoomIn {
+  from { opacity: 0; transform: scale(0.62); }
+  to   { opacity: 1; transform: scale(1); }
+}
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-20px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(20px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes slideInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.7; transform: scale(1.15); }
+}
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.3; }
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-6px); }
+}
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+@keyframes barGrow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes draw { to { stroke-dashoffset: 0; } }
+@keyframes dotPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(2,115,94,0.4); }
+  50%       { box-shadow: 0 0 0 5px rgba(2,115,94,0); }
+}
+
+/* ─── Responsive breakpoints ─────────────────────────────────── */
+@media (max-width: 1024px) {
+  .sidebar {
+    width: var(--sidebar-width-collapsed);
+    min-width: var(--sidebar-width-collapsed);
+  }
+  .sidebar.collapsed {
+    width: var(--sidebar-width-collapsed);
+    min-width: var(--sidebar-width-collapsed);
+  }
+  .header { min-width: 400px; }
+}
+
+@media (max-width: 768px) {
+  .app-shell { position: relative; }
+  .sidebar {
+    position: fixed;
+    left: 0; top: 0;
+    height: 100vh;
+    width: var(--sidebar-width-collapsed);
+    min-width: var(--sidebar-width-collapsed);
+    z-index: 200;
+    transform: translateX(0);
+    transition: width 0.25s cubic-bezier(0.4,0,0.2,1),
+                min-width 0.25s cubic-bezier(0.4,0,0.2,1),
+                transform 0.25s cubic-bezier(0.4,0,0.2,1);
+  }
+  .sidebar.mobile-open {
+    width: var(--sidebar-width);
+    min-width: var(--sidebar-width);
+  }
+  .main-area {
+    margin-left: 0 !important;
+    width: 100%;
+  }
+  .header {
+    min-width: calc(100vw - 20px);
+    top: 8px;
+    border-radius: 20px;
+    padding: 0 12px;
+  }
+  .header-search, .header-status {
+    display: none !important;
+  }
+  .content { padding: 76px 10px 96px; }
+}
+
+@media (max-width: 900px) {
+  .bento-grid { grid-template-columns: 1fr; }
+  .bento-grid > div { grid-column: 1 / -1 !important; }
+}
+
+@media (max-width: 480px) {
+  .content { padding: 76px 8px 96px; }
+}
+
+/* ─── Utilidades ─────────────────────────────────────────────── */
+.lift {
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+  will-change: transform;
+}
+.lift:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 28px rgba(2,115,94,0.10), 0 2px 8px rgba(0,0,0,0.06);
+  border-color: rgba(2,115,94,0.25) !important;
+}
+.tap:active { transform: scale(0.98); }
+
+/* Entrada escalonada */
+.stagger > * {
+  opacity: 0;
+  animation: slideInUp 0.45s ease forwards;
+  animation-delay: calc(var(--i, 0) * 60ms);
+}
+
+/* Barra de progreso animada */
+.bar-grow { transform-origin: left center; animation: barGrow 0.9s cubic-bezier(0.4,0,0.2,1) both; }
+
+/* Trazo SVG */
+.draw-line { stroke-dasharray: 1000; stroke-dashoffset: 1000; animation: draw 1.1s ease forwards; }
+
+/* Filas hover */
+.trow { transition: background 0.15s ease; }
+.trow:hover { background: rgba(2,115,94,0.04); }
+.barrow { transition: transform 0.15s ease; }
+.barrow:hover { transform: translateX(3px); }
+
+/* Stack de toasts MAYIA */
+.mayia-stack { bottom: 24px; right: 16px; width: 380px; max-width: calc(100vw - 32px); }
+@media (max-width: 768px) {
+  .mayia-stack {
+    top: 16px; bottom: auto; right: 50%; transform: translateX(50%);
+    width: calc(100vw - 24px);
+    z-index: 9999;
+  }
+}
+
+/* ─── Reduced motion ─────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+  .lift:hover { transform: none; }
+  .hud-panel::after { display: none; }
+}
