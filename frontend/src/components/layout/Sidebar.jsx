@@ -25,6 +25,20 @@ const IconSeguridad = () => (
     <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
   </svg>
 )
+const IconCiberseguridad = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+    <path d="M9 12l2 2 4-4"/>
+  </svg>
+)
+const IconForensia = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="11" cy="11" r="8"/>
+    <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+    <line x1="11" y1="8" x2="11" y2="14"/>
+    <line x1="8" y1="11" x2="14" y2="11"/>
+  </svg>
+)
 const IconProtocolos = () => (
   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
     <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
@@ -51,6 +65,8 @@ const nav = [
   { to: '/vigilancia',   label: 'Vigilancia',      Icon: IconVigilancia },
   { to: '/alertas',      label: 'Alertas',         Icon: IconAlertas },
   { to: '/seguridad',    label: 'Seguridad',       Icon: IconSeguridad },
+  { to: '/ciberseguridad',label: 'Ciberseguridad', Icon: IconCiberseguridad },
+  { to: '/forensia',     label: 'Forensia',        Icon: IconForensia },
   { to: '/protocolos',   label: 'Protocolos',      Icon: IconProtocolos },
   { to: '/edificio',     label: 'Edificio',        Icon: IconEdificio },
   { to: '/configuracion',label: 'Configuración',   Icon: IconConfig },

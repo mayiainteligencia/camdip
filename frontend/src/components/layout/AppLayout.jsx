@@ -12,6 +12,8 @@ const routeMeta = {
   '/vigilancia':    { title: 'Vigilancia y CCTV' },
   '/alertas':       { title: 'Centro de Alertas' },
   '/seguridad':     { title: 'Seguridad y Proveedores' },
+  '/ciberseguridad':{ title: 'Ciberseguridad' },
+  '/forensia':      { title: 'Análisis Forense Digital' },
   '/protocolos':    { title: 'Protocolos de Emergencia' },
   '/edificio':      { title: 'Información del Edificio' },
   '/configuracion': { title: 'Configuración' },
