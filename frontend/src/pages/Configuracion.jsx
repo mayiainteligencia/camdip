@@ -98,7 +98,7 @@ export default function Configuracion() {
             { label: 'Control de Proveedores',    status: 'Activo · 1 incidente',ok: false },
             { label: 'Protocolos de Emergencia',  status: 'Standby',             ok: true  },
             { label: 'Sistema contra Incendios',  status: '1 zona en alerta',    ok: false },
-            { label: 'Asistente IA (MAYIA+Jarvis)',status: 'Activo',             ok: true  },
+            { label: 'Asistente IA (MAYIA)',       status: 'Activo',             ok: true  },
           ].map(({ label, status, ok }) => (
             <div key={label} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '9px 0', borderBottom: '1px solid rgba(0,0,0,0.05)' }}>
               <span style={{ fontSize: 13, color: '#1A202C', fontWeight: 600 }}>{label}</span>

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
-import { JarvisPanel } from '@/components/ui/Jarvis'
+import { MayiaVoicePanel } from '@/components/ui/VoiceAssistant'
 import { MayiaPanel } from '@/components/ui/Mayia'
-import { ALERTS, BUILDING_ZONES, getDashboardKPIs, getRecentActivity } from '@/data/securityData'
+import { ALERTS, getDashboardKPIs, getRecentActivity } from '@/data/securityData'
 import ubicacion from '@/assets/ubicacion.jpeg'
 import { 
   IconFire, IconUser, IconCar, IconMegaphone, IconCamera, IconBox, 
@@ -200,58 +200,13 @@ const sac = {
   time:   { fontSize: 10.5, color: '#A0AEC0', flexShrink: 0 },
 }
 
-/* ── Mapa del Edificio con Zona Pins ────────────────────────────────── */
+/* ── Mapa del Edificio ─────────────────────────────────────────────── */
 function BuildingMap() {
-  const [hovered, setHovered] = useState(null)
-  const hoveredZone = BUILDING_ZONES.find(z => z.id === hovered)
   return (
     <div style={{ position: 'relative', borderRadius: 12, overflow: 'hidden', aspectRatio: '16/9' }}>
       <img src={ubicacion} alt="Ubicación Cámara de Diputados" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
       {/* Overlay oscuro suave */}
       <div style={{ position: 'absolute', inset: 0, background: 'rgba(8,38,30,0.25)', pointerEvents: 'none' }} />
-      {/* Zona hotspots */}
-      {BUILDING_ZONES.map(zone => (
-        <div
-          key={zone.id}
-          style={{
-            position: 'absolute',
-            left: `${zone.x}%`, top: `${zone.y}%`,
-            transform: 'translate(-50%,-50%)',
-            cursor: 'pointer',
-            zIndex: 10,
-          }}
-          onMouseEnter={() => setHovered(zone.id)}
-          onMouseLeave={() => setHovered(null)}
-        >
-          <div style={{
-            width: zone.alerts > 0 ? 16 : 11,
-            height: zone.alerts > 0 ? 16 : 11,
-            borderRadius: '50%',
-            background: zone.alerts > 0 ? '#C53030' : '#02735E',
-            border: '2px solid rgba(255,255,255,0.8)',
-            boxShadow: zone.alerts > 0 ? '0 0 12px rgba(197,48,48,0.7)' : '0 0 8px rgba(2,115,94,0.6)',
-            animation: zone.alerts > 0 ? 'pulse 1.5s ease-in-out infinite' : 'none',
-          }} />
-        </div>
-      ))}
-      {/* Tooltip de zona */}
-      {hoveredZone && (
-        <div style={{
-          position: 'absolute',
-          left: `${hoveredZone.x}%`, top: `${hoveredZone.y - 10}%`,
-          transform: 'translate(-50%, -100%)',
-          background: 'rgba(8,38,30,0.95)',
-          color: '#fff', fontSize: 11, fontWeight: 700,
-          padding: '5px 10px', borderRadius: 8,
-          whiteSpace: 'nowrap', zIndex: 20,
-          display: 'flex', alignItems: 'center', gap: 4,
-          border: '1px solid rgba(2,115,94,0.4)',
-          pointerEvents: 'none',
-        }}>
-          {hoveredZone.name}
-          {hoveredZone.alerts > 0 && <span style={{ color: '#C53030', display: 'flex', alignItems: 'center', gap: 4 }}><IconAlert size={12}/> {hoveredZone.alerts}</span>}
-        </div>
-      )}
       {/* Label institucional */}
       <div style={{ position: 'absolute', bottom: 10, left: 12, background: 'rgba(8,38,30,0.85)', borderRadius: 8, padding: '4px 10px', border: '1px solid rgba(214,217,137,0.20)' }}>
         <span style={{ fontSize: 10, color: '#D6D989', fontWeight: 700, letterSpacing: '0.06em' }}>H. CÁMARA DE DIPUTADOS · SAN LÁZARO, CDMX</span>
@@ -375,8 +330,8 @@ export default function ComandoCentral() {
           <span className="hud-corner bl" />
           <span className="hud-corner br" />
 
-          {/* Jarvis */}
-          <JarvisPanel mapData={[]} alerts={activeAlerts} />
+          {/* MAYIA — asistente de voz */}
+          <MayiaVoicePanel mapData={[]} alerts={activeAlerts} />
 
           {/* MAYIA */}
           <MayiaPanel section="dashboard" title="MAYIA · Seguridad" />

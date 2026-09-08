@@ -3,6 +3,8 @@ import { Outlet, useLocation } from 'react-router-dom'
 import Sidebar from './Sidebar'
 import Header from './Header'
 import MobileNav from './MobileNav'
+import logoFspm from '@/assets/logos/fspm.jpeg'
+import logoMayia from '@/assets/logos/mayiaLogoBlanco.png'
 
 import config from '@/config/config'
 
@@ -54,6 +56,16 @@ export default function AppLayout() {
       )}
 
       <div className="main-area">
+        {!isMobile && (
+          <>
+            <div className="header-edge-logo left">
+              <img src={logoFspm} alt="FSPM" />
+            </div>
+            <div className="header-edge-logo right">
+              <img src={logoMayia} alt="MAYIA" />
+            </div>
+          </>
+        )}
         <Header
           title={meta.title}
           crumbs={crumbs}

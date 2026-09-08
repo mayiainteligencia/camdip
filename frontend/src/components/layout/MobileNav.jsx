@@ -1,6 +1,6 @@
 import { NavLink } from 'react-router-dom'
 import config from '@/config/config'
-import { useVoiceAssistant } from '@/components/ui/Jarvis'
+import { useVoiceAssistant } from '@/components/ui/VoiceAssistant'
 
 /* Floating bottom nav para móvil. Centro = logo Cámara → Comando Central. */
 
@@ -69,7 +69,7 @@ export default function MobileNav() {
       ))}
 
       {/* Asistente de voz */}
-      <button onClick={start} title="Jarvis — Asistente de Voz" aria-label="Asistente de voz" style={s.micBtn}>
+      <button onClick={start} title="MAYIA — Asistente de Voz" aria-label="Asistente de voz" style={s.micBtn}>
         <span style={iconWrap(listening)}><IconMic /></span>
       </button>
     </nav>

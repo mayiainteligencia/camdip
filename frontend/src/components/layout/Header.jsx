@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { JarvisButton } from '@/components/ui/Jarvis'
+import { MayiaButton } from '@/components/ui/VoiceAssistant'
 import { useMayia, MayiaMark } from '@/components/ui/Mayia'
 import config from '@/config/config'
 
@@ -109,8 +109,8 @@ export default function Header({ title, crumbs = [], collapsed, isMobile, onTogg
         <span style={s.secText}>Nivel Medio</span>
       </div>
 
-      {/* ── Jarvis ──────────────────────────────────── */}
-      <JarvisButton />
+      {/* ── MAYIA ──────────────────────────────────── */}
+      <MayiaButton />
 
       {/* ── Notificaciones MAYIA ────────────────────── */}
       <div style={{ position: 'relative', flexShrink: 0 }}>

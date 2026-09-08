@@ -17,7 +17,7 @@ const COMMANDS = [
   { to: '/configuracion', label: 'Configuración',   keys: ['config', 'ajuste', 'preferencia', 'configuración', 'configuracion'] },
 ]
 
-/* Preguntas de seguridad que Jarvis responde con datos del sistema. */
+/* Preguntas de seguridad que MAYIA responde con datos del sistema. */
 function responderDato(said, pathname) {
   const has = (...ws) => ws.some(w => said.includes(w))
   const activeCams = CAMERAS.filter(c => c.status === 'online').length
@@ -121,7 +121,7 @@ export function useVoiceAssistant({ onNavigate } = {}) {
 }
 
 /* ── Botón compacto para el Header ───────────────────────────────── */
-export function JarvisButton() {
+export function MayiaButton() {
   const [hover, setHover] = useState(false)
   const [expanded, setExpanded] = useState(false)
 
@@ -212,7 +212,7 @@ export function JarvisButton() {
 }
 
 /* ── Panel grande para el Comando Central (Seguridad) ────────────── */
-export function JarvisPanel() {
+export function MayiaVoicePanel() {
   const { supported, listening, transcript, reply, start } = useVoiceAssistant()
 
   const activeCams     = CAMERAS.filter(c => c.status === 'online').length
@@ -234,10 +234,10 @@ export function JarvisPanel() {
 
       <div style={panel.head}>
         <div>
-          <h3 style={panel.title}>Jarvis · Asistente IA</h3>
+          <h3 style={panel.title}>MAYIA · Asistente de Voz</h3>
           <p style={panel.sub}>{listening ? 'Escuchando…' : 'Di un comando o pregunta'}</p>
         </div>
-        <button onClick={start} disabled={!supported} style={panel.talkBtn} title="Hablar con Jarvis">
+        <button onClick={start} disabled={!supported} style={panel.talkBtn} title="Hablar con MAYIA">
           {listening ? 'Detener' : 'Hablar'}
         </button>
       </div>

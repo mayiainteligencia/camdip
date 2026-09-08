@@ -1,5 +1,100 @@
 import { useState } from 'react'
 import { MayiaPanel } from '@/components/ui/Mayia'
+import { IconUser, IconSearch } from '@/components/ui/Icons'
+
+/* ── Avistamientos simulados por cámara (mockup) ─────────────────── */
+const MOCK_SIGHTINGS = [
+  { cameraLabel: 'Cámara 03 — Pasillo Legislativo', zone: 'Planta 1', time: 'hace 6 minutos' },
+  { cameraLabel: 'Cámara 01 — Acceso Principal',     zone: 'Entrada Norte', time: 'hace 22 minutos' },
+  { cameraLabel: 'Cámara 07 — Salón de Sesiones',    zone: 'Planta 2', time: 'hace 41 minutos' },
+  { cameraLabel: 'Cámara 08 — Área de Proveedores',  zone: 'Acceso C', time: 'hace 1 hora 3 minutos' },
+  { cameraLabel: 'Cámara 02 — Lobby Interno',        zone: 'Planta Baja', time: 'hace 12 minutos' },
+]
+
+/* ── Búsqueda de persona/objeto: escanea red de cámaras ────────────── */
+function PersonObjectSearch() {
+  const [query, setQuery] = useState('')
+  const [scanning, setScanning] = useState(false)
+  const [progress, setProgress] = useState(0)
+  const [result, setResult] = useState(null)
+
+  const handleScan = (e) => {
+    e.preventDefault()
+    if (!query.trim() || scanning) return
+    setScanning(true)
+    setProgress(0)
+    setResult(null)
+    let p = 0
+    const interval = setInterval(() => {
+      p += 8
+      setProgress(Math.min(p, 100))
+      if (p >= 100) {
+        clearInterval(interval)
+        setScanning(false)
+        const hash = query.split('').reduce((a, c) => a + c.charCodeAt(0), 0)
+        setResult(MOCK_SIGHTINGS[hash % MOCK_SIGHTINGS.length])
+      }
+    }, 120)
+  }
+
+  return (
+    <div className="hud-panel lift" style={{ padding: 16 }}>
+      <span className="hud-corner tl" />
+      <p style={{ fontSize: 12, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#1A202C', marginBottom: 4 }}>
+        Búsqueda de Persona / Objeto
+      </p>
+      <p style={{ fontSize: 11, color: '#718096', marginBottom: 12 }}>
+        Describe a la persona u objeto y MAYIA escanea la red de cámaras para decirte cuándo y dónde se vio por última vez.
+      </p>
+
+      <form onSubmit={handleScan} style={{ display: 'flex', gap: 8, marginBottom: 12 }}>
+        <input
+          value={query}
+          onChange={e => setQuery(e.target.value)}
+          placeholder="Ej: hombre chamarra roja, maleta negra…"
+          style={ss.searchInput}
+        />
+        <button type="submit" disabled={scanning || !query.trim()} style={{ ...ss.btnAction, width: 'auto', padding: '10px 16px', opacity: scanning || !query.trim() ? 0.5 : 1 }}>
+          {scanning ? 'Escaneando…' : 'Escanear'}
+        </button>
+      </form>
+
+      <div style={{
+        position: 'relative', height: 84, borderRadius: 10, overflow: 'hidden',
+        background: '#0a1a14', display: 'flex', alignItems: 'center', justifyContent: 'center',
+        border: '1px solid rgba(2,115,94,0.20)', marginBottom: (scanning || result) ? 12 : 0,
+      }}>
+        <span style={{ color: scanning ? '#02735E' : 'rgba(2,115,94,0.35)', transition: 'color 0.2s' }}>
+          <IconUser size={36} />
+        </span>
+        {scanning && <div className="cam-scanline" />}
+        {scanning && (
+          <span style={{ position: 'absolute', bottom: 6, right: 8, display: 'flex', alignItems: 'center', gap: 4, color: '#02735E' }}>
+            <IconSearch size={11} />
+            <span style={{ fontSize: 9, fontWeight: 700, letterSpacing: '0.06em' }}>ESCANEANDO CÁMARAS…</span>
+          </span>
+        )}
+      </div>
+
+      {scanning && (
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
+          <div style={{ flex: 1, height: 6, background: '#E2E8F0', borderRadius: 3, overflow: 'hidden' }}>
+            <div style={{ height: '100%', width: `${progress}%`, background: '#02735E', transition: 'width 0.12s linear' }} />
+          </div>
+          <span style={{ fontSize: 11, fontWeight: 800, color: '#02735E', width: 35 }}>{progress}%</span>
+        </div>
+      )}
+
+      {result && (
+        <div style={{ background: 'rgba(2,115,94,0.06)', border: '1px solid rgba(2,115,94,0.20)', borderRadius: 10, padding: '10px 14px', animation: 'fadeInAlert 0.4s ease' }}>
+          <p style={{ fontSize: 10, fontWeight: 800, color: '#02735E', letterSpacing: '0.06em', marginBottom: 4 }}>ÚLTIMA VEZ VISTO</p>
+          <p style={{ fontSize: 12.5, fontWeight: 700, color: '#1A202C' }}>{result.cameraLabel}</p>
+          <p style={{ fontSize: 11, color: '#718096' }}>{result.zone} · {result.time}</p>
+        </div>
+      )}
+    </div>
+  )
+}
 
 // Radar SVG Animado
 const RadarGraph = ({ active }) => {
@@ -235,6 +330,9 @@ export default function Forensia() {
           </button>
         </div>
 
+        {/* PANEL 5: Búsqueda de Persona / Objeto */}
+        <PersonObjectSearch />
+
       </div>
     </div>
   )
@@ -248,4 +346,5 @@ const ss = {
   btnAlertOutline: { padding: '8px 14px', borderRadius: 6, border: '1px solid #C53030', background: 'transparent', color: '#C53030', fontSize: 10, fontWeight: 800, cursor: 'pointer', transition: '0.2s' },
   btnAlert: { padding: '10px 14px', borderRadius: 8, border: 'none', background: '#C53030', color: '#fff', fontSize: 11, fontWeight: 800, cursor: 'pointer', transition: '0.2s' },
   btnOutline: { padding: '10px 14px', borderRadius: 8, border: '1px solid #CBD5E0', background: 'transparent', color: '#4A5568', fontSize: 11, fontWeight: 800, cursor: 'pointer', transition: '0.2s' },
+  searchInput: { flex: 1, height: 40, padding: '0 12px', borderRadius: 8, border: '1.5px solid rgba(2,115,94,0.20)', background: 'rgba(2,115,94,0.03)', fontSize: 12.5, color: '#1A202C', outline: 'none' },
 }
