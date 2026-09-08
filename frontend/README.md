@@ -1,4 +1,4 @@
-# PRIBrain — Frontend
+# Cámara de Diputados — Centro de Comando (Frontend)
 
 Dashboard en **React + Vite**. Vive solo, sin backend (`npm run dev`). Cuando
 haya datos reales (Excel, API, etc.), se enchufan en **un solo lugar**:
@@ -172,7 +172,7 @@ un **dark dashboard premium** inspirado en dashboards analíticos modernos.
 
 ## Changelog — Experiencia Inmersiva MAYIA y Refinamientos v1.2 (2026-07-12)
 
-### Modo Inmersivo de MAYIA (Jarvis)
+### Modo Inmersivo de MAYIA
 - **Experiencia a Pantalla Completa:** Al hacer clic en el átomo del Header, se invoca un overlay inmersivo usando `createPortal`, el cual oscurece y difumina el fondo del sistema (`backdrop-filter: blur(12px)`).
 - **Conciencia de Contexto:** El asistente inteligente de voz detecta en qué sección del dashboard se encuentra el usuario (vía `useLocation`) para responder correctamente preguntas de ubicación ("¿dónde estoy?").
 - **UI Tipográfica:** Las transcripciones de voz se muestran en tamaño gigante heroico en el centro de la pantalla.
