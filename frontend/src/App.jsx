@@ -2,6 +2,7 @@ import { Routes, Route, Navigate } from 'react-router-dom'
 import AppLayout from '@/components/layout/AppLayout'
 import ComandoCentral from '@/pages/ComandoCentral'
 import Vigilancia from '@/pages/Vigilancia'
+import Robots from '@/pages/Robots'
 import Alertas from '@/pages/Alertas'
 import Seguridad from '@/pages/Seguridad'
 import Forensia from '@/pages/Forensia'
@@ -31,6 +32,7 @@ export default function App() {
       >
         <Route index                  element={<ComandoCentral />} />
         <Route path="vigilancia"      element={<Vigilancia />} />
+        <Route path="robots"          element={<Robots />} />
         <Route path="alertas"         element={<Alertas />} />
         <Route path="seguridad"       element={<Seguridad />} />
         <Route path="ciberseguridad"  element={<Ciberseguridad />} />

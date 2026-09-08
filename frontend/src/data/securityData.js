@@ -6,14 +6,61 @@
 
 /* ── Cámaras CCTV ──────────────────────────────────────────────────── */
 export const CAMERAS = [
-  { id: 'cam-01', name: 'Acceso Principal',   zone: 'Entrada Norte',   status: 'online',  recording: true,  feed: null },
-  { id: 'cam-02', name: 'Lobby Interno',       zone: 'Planta Baja',     status: 'online',  recording: true,  feed: null },
-  { id: 'cam-03', name: 'Pasillo Legislativo', zone: 'Planta 1',        status: 'online',  recording: true,  feed: null },
-  { id: 'cam-04', name: 'Acceso Norte',        zone: 'Exterior Norte',  status: 'offline', recording: false, feed: null },
-  { id: 'cam-05', name: 'Zona de Carga',       zone: 'Acceso B',        status: 'online',  recording: true,  feed: null },
-  { id: 'cam-06', name: 'Estacionamiento Sur', zone: 'Exterior Sur',    status: 'online',  recording: true,  feed: null },
-  { id: 'cam-07', name: 'Salón de Sesiones',   zone: 'Planta 2',        status: 'online',  recording: true,  feed: null },
-  { id: 'cam-08', name: 'Área de Proveedores', zone: 'Acceso C',        status: 'online',  recording: true,  feed: null },
+  { id: 'cam-01', name: 'Acceso Principal',   zone: 'Entrada Norte',   status: 'online',  recording: true,  feed: null, type: 'ptz',     ai: ['acceso no autorizado', 'paquete sospechoso'] },
+  { id: 'cam-02', name: 'Lobby Interno',       zone: 'Planta Baja',     status: 'online',  recording: true,  feed: null, type: 'domo',    ai: ['aglomeración', 'objeto abandonado'] },
+  { id: 'cam-03', name: 'Pasillo Legislativo', zone: 'Planta 1',        status: 'online',  recording: true,  feed: null, type: 'fisheye', ai: ['intrusión', 'comportamiento atípico'] },
+  { id: 'cam-04', name: 'Acceso Norte',        zone: 'Exterior Norte',  status: 'online',  recording: true,  feed: null, type: 'domo',    ai: ['intrusión', 'vandalismo'] },
+  { id: 'cam-05', name: 'Zona de Carga',       zone: 'Acceso B',        status: 'online',  recording: true,  feed: null, type: 'ptz',     ai: ['vehículo no autorizado', 'extracción irregular'] },
+  { id: 'cam-06', name: 'Estacionamiento Sur', zone: 'Exterior Sur',    status: 'online',  recording: true,  feed: null, type: 'termica', ai: ['anomalía térmica', 'humo/incendio'] },
+  { id: 'cam-07', name: 'Salón de Sesiones',   zone: 'Planta 2',        status: 'online',  recording: true,  feed: null, type: 'domo',    ai: ['alteración/violencia', 'caída o emergencia médica'] },
+  { id: 'cam-08', name: 'Área de Proveedores', zone: 'Acceso C',        status: 'online',  recording: true,  feed: null, type: 'ptz',     ai: ['armas — postura de ocultamiento', 'cámara manipulada'] },
+]
+
+/* ── Detección de armas por postura (cámaras PTZ/térmicas con IA) ───── */
+export const WEAPON_DETECTION_CAMERAS = ['cam-01', 'cam-08']
+
+/* ── Capacidades de detección IA (portafolio AIOT) ─────────────────── */
+export const AI_DETECTION_CAPABILITIES = [
+  { id: 'weapon',     label: 'Arma oculta / postura de ocultamiento', detail: 'Detecta a una persona agachándose o adoptando posturas típicas de ocultar un arma antes de un incidente.' },
+  { id: 'package',    label: 'Paquete sospechoso',                    detail: 'Objetos abandonados o dejados sin supervisión por tiempo prolongado.' },
+  { id: 'tamper',     label: 'Cámara manipulada / tampering',         detail: 'Bloqueo, desenfoque o reorientación física de una cámara.' },
+  { id: 'intrusion',  label: 'Intrusión y vandalismo',                detail: 'Acceso a zonas restringidas o daño a infraestructura.' },
+  { id: 'blindspot',  label: 'Punto ciego generado',                  detail: 'Obstrucción que crea un área sin cobertura de video.' },
+  { id: 'fire',       label: 'Humo / incendio y anomalías térmicas',  detail: 'Lectura de cámaras térmicas para focos de calor y humo temprano.' },
+  { id: 'crowd',      label: 'Aglomeración',                          detail: 'Concentración de personas por encima del umbral en una zona.' },
+  { id: 'violence',   label: 'Alteración / violencia',                detail: 'Movimientos bruscos o forcejeo compatibles con agresión.' },
+  { id: 'medical',    label: 'Caída o emergencia médica',             detail: 'Persona en el suelo sin movimiento por tiempo anómalo.' },
+  { id: 'access',     label: 'Acceso no autorizado',                  detail: 'Ingreso sin credencial válida o tailgating en torniquetes.' },
+  { id: 'ops',        label: 'Anomalías operativas',                  detail: 'Desviaciones de patrones normales de operación en el sitio.' },
+  { id: 'insider',    label: 'Amenazas internas',                     detail: 'Exportación irregular de video, cambios de permisos, comportamiento atípico de operador.' },
+]
+
+/* ── Drones ───────────────────────────────────────────────────────── */
+export const DRONES = [
+  {
+    id: 'drone-01', name: 'Dron Interior 1', model: 'Indoor Patrol IA',
+    zone: 'Salón de Sesiones — Planta 2', status: 'docked', battery: 96,
+    capabilities: ['Cámara térmica', 'Detección de aglomeración', 'Vuelo autónomo indoor'],
+  },
+  {
+    id: 'drone-02', name: 'Dron Perimetral 1', model: 'Exterior Guard',
+    zone: 'Perímetro Av. Congreso', status: 'docked', battery: 88,
+    capabilities: ['Zoom óptico 30x', 'Seguimiento de intrusos', 'Térmica nocturna'],
+  },
+]
+
+/* ── Robots ───────────────────────────────────────────────────────── */
+export const ROBOTS = [
+  {
+    id: 'robot-01', name: 'Robot de Patrullaje 1', model: 'Sentry Ground Unit',
+    zone: 'Lobby y pasillos — Planta Baja', status: 'patrolling', battery: 74,
+    capabilities: ['Ronda autónoma programada', 'Detección de personas y objetos', 'Comunicación bidireccional'],
+  },
+  {
+    id: 'robot-02', name: 'Robot de Patrullaje 2', model: 'Sentry Ground Unit',
+    zone: 'Estacionamiento Sur', status: 'charging', battery: 31,
+    capabilities: ['Lectura de placas', 'Alarma sonora integrada', 'Cámara 360°'],
+  },
 ]
 
 /* ── Alertas activas ───────────────────────────────────────────────── */
@@ -24,6 +71,13 @@ export const ALERTS = [
     detail: 'Detector 2-C-07 activado en Planta 2, Zona C. Temperatura ambiente elevada.',
     zone: 'Planta 2 — Zona C', camera: 'cam-07', time: '10:28',
     status: 'active', protocol: 'fire',
+  },
+  {
+    id: 'alr-009', type: 'weapon',       severity: 'critical',
+    title: 'Postura de ocultamiento de arma detectada',
+    detail: 'IA detectó a un individuo agachándose y ocultando un objeto bajo la ropa en Área de Proveedores. Requiere verificación inmediata.',
+    zone: 'Acceso C — Área de Proveedores', camera: 'cam-08', time: '10:31',
+    status: 'active', protocol: 'intruder',
   },
   {
     id: 'alr-002', type: 'suspect',      severity: 'high',
@@ -47,11 +101,11 @@ export const ALERTS = [
     status: 'monitoring', protocol: 'protest',
   },
   {
-    id: 'alr-005', type: 'camera',       severity: 'medium',
-    title: 'Cámara 4 sin señal',
-    detail: 'Acceso Norte lleva 14 minutos sin transmisión. Posible falla técnica.',
+    id: 'alr-005', type: 'camera',       severity: 'low',
+    title: 'Cámara 4 — señal restablecida',
+    detail: 'Acceso Norte recuperó transmisión estable tras una falla técnica breve.',
     zone: 'Acceso Norte', camera: 'cam-04', time: '10:01',
-    status: 'active', protocol: null,
+    status: 'resolved', protocol: null,
   },
   {
     id: 'alr-006', type: 'extraction',   severity: 'medium',
@@ -249,7 +303,7 @@ export const DECISIONS = [
 /* ── KPIs del Dashboard ────────────────────────────────────────────── */
 export async function getDashboardKPIs() {
   return [
-    { id: 'cameras',   label: 'Cámaras Activas',   value: '7/8',  sub: '1 sin señal',         color: 'yellow', trend: 'down' },
+    { id: 'cameras',   label: 'Cámaras Activas',   value: '8/8',  sub: 'Todas operativas',    color: 'green',  trend: 'up'   },
     { id: 'alerts',    label: 'Alertas del Día',    value: '8',    sub: '3 críticas/altas',    color: 'red',    trend: 'up'   },
     { id: 'providers', label: 'Proveedores en Sitio', value: '2',  sub: '1 no autorizado',     color: 'orange', trend: 'up'   },
     { id: 'security',  label: 'Nivel de Seguridad', value: '72%',  sub: 'Medio-Alto',          color: 'green',  trend: 'down' },

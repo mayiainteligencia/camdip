@@ -2,13 +2,14 @@ import { useState } from 'react'
 import { ALERTS } from '@/data/securityData'
 import { MayiaPanel } from '@/components/ui/Mayia'
 import { useConfirm } from '@/components/ui/ConfirmModal'
-import { 
-  IconFire, IconUser, IconCar, IconMegaphone, IconCamera, IconBox, 
-  IconHospital, IconBag, IconAlert, IconChevronDown, IconChevronUp
+import {
+  IconFire, IconUser, IconCar, IconMegaphone, IconCamera, IconBox,
+  IconHospital, IconBag, IconAlert, IconChevronDown, IconChevronUp, IconWeapon
 } from '@/components/ui/Icons'
 
 /* ── Config de tipos y severidades ────────────────────────────────── */
 const TYPE_CFG = {
+  weapon:     { label: 'Arma detectada',   icon: <IconWeapon size={22} />, color: '#9B2C2C' },
   fire:       { label: 'Incendio',         icon: <IconFire size={22} />, color: '#C53030' },
   suspect:    { label: 'Sospechoso',       icon: <IconUser size={22} />, color: '#702459' },
   vehicle:    { label: 'Vehículo',         icon: <IconCar size={22} />, color: '#C05621' },
@@ -25,7 +26,7 @@ const SEV_CFG = {
   medium:   { label: 'Media',   color: '#B7791F', bg: 'rgba(183,121,31,0.09)',border: 'rgba(183,121,31,0.20)' },
   low:      { label: 'Baja',    color: '#2F855A', bg: 'rgba(47,133,90,0.09)', border: 'rgba(47,133,90,0.20)' },
 }
-const FILTER_TYPES = ['todos', 'fire', 'suspect', 'vehicle', 'protest', 'camera', 'extraction', 'medical', 'forgotten']
+const FILTER_TYPES = ['todos', 'weapon', 'fire', 'suspect', 'vehicle', 'protest', 'camera', 'extraction', 'medical', 'forgotten']
 const FILTER_SEV   = ['todas', 'critical', 'high', 'medium', 'low']
 
 /* ── Tarjeta de alerta expandible ─────────────────────────────────── */

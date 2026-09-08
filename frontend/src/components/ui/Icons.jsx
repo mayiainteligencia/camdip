@@ -30,6 +30,27 @@ export const IconCamera = ({ size=16, ...props }) => (
   </svg>
 )
 
+export const IconWeapon = ({ size=16, ...props }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+    <path d="M3 21l6-6M13 5l6 6-2 2-2-2-3 3-3-3 3-3-2-2 2-2 1 1 2-2z"/><path d="M17.5 3.5 21 7l-2 2-3.5-3.5z"/>
+  </svg>
+)
+
+export const IconDrone = ({ size=16, ...props }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+    <circle cx="12" cy="12" r="3"/>
+    <circle cx="4" cy="4" r="2"/><circle cx="20" cy="4" r="2"/><circle cx="4" cy="20" r="2"/><circle cx="20" cy="20" r="2"/>
+    <path d="M9.5 9.5 5.5 5.5M14.5 9.5l4-4M9.5 14.5l-4 4M14.5 14.5l4 4"/>
+  </svg>
+)
+
+export const IconRobot = ({ size=16, ...props }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+    <rect x="4" y="9" width="16" height="11" rx="2"/><circle cx="9" cy="14.5" r="1.2" fill="currentColor"/><circle cx="15" cy="14.5" r="1.2" fill="currentColor"/>
+    <path d="M12 9V5M9 5h6"/><circle cx="12" cy="3.5" r="1.3"/>
+  </svg>
+)
+
 export const IconBox = ({ size=16, ...props }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
     <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" x2="12" y1="22.08" y2="12"/>

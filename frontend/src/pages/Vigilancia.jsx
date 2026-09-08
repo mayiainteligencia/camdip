@@ -1,11 +1,32 @@
 import { useState } from 'react'
-import { CAMERAS, PLATE_LOG } from '@/data/securityData'
+import { CAMERAS, PLATE_LOG, AI_DETECTION_CAPABILITIES, WEAPON_DETECTION_CAMERAS } from '@/data/securityData'
 import { MayiaPanel } from '@/components/ui/Mayia'
-import { IconAlert, IconCheck, IconCircle } from '@/components/ui/Icons'
+import { IconAlert, IconCheck, IconCircle, IconWeapon } from '@/components/ui/Icons'
+import vidAccesoPrincipal from '@/assets/Acceso Principal — PTZ — Entrada Norte.mp4'
+import vidLobbyInterno from '@/assets/Lobby Interno — Domo — Planta Baja.mp4'
+import vidPasilloLegislativo from '@/assets/Pasillo Legislativo — Fisheye — Planta 1.mp4'
+import vidAccesoNorte from '@/assets/Acceso Norte — Domo — Exterior Norte —.mp4'
+import vidSalonSesiones from '@/assets/Salón de Sesiones — Domo — Planta 2.mp4'
+import vidZonaCarga from '@/assets/Zona de Carga — PTZ — Acceso B.mp4'
+import vidEstacionamientoSur from '@/assets/Estacionamiento Sur — Térmica — Exterior Sur.mp4'
+import vidAreaProveedores from '@/assets/Área de Proveedores — PTZ — Acceso C.mp4'
+
+const CAM_TYPE_LABEL = { domo: 'Domo', fisheye: 'Fisheye', ptz: 'PTZ', termica: 'Térmica' }
+const CAM_VIDEOS = {
+  'cam-01': vidAccesoPrincipal,
+  'cam-02': vidLobbyInterno,
+  'cam-03': vidPasilloLegislativo,
+  'cam-04': vidAccesoNorte,
+  'cam-05': vidZonaCarga,
+  'cam-06': vidEstacionamientoSur,
+  'cam-07': vidSalonSesiones,
+  'cam-08': vidAreaProveedores,
+}
 
 /* ── Cámara Feed (Mockup) ──────────────────────────────────────────── */
 function CamFeed({ cam }) {
   const isOffline = cam.status === 'offline'
+  const videoSrc = CAM_VIDEOS[cam.id]
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
@@ -23,19 +44,30 @@ function CamFeed({ cam }) {
           <>
             <div className="cam-noise" />
             <div className="cam-scanline" />
-            {/* Contenido de fondo simulado */}
-            <div style={{
-              position: 'absolute', inset: 0, zIndex: 1,
-              background: `linear-gradient(135deg, #0a1a14 0%, #1a3028 40%, #0f2019 100%)`,
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-            }}>
-              <div style={{ textAlign: 'center', opacity: 0.2 }}>
-                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#02735E" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/>
-                </svg>
-                <p style={{ fontSize: 9, color: '#02735E', marginTop: 6, letterSpacing: '0.1em', fontWeight: 600 }}>FEED EN VIVO</p>
+            {/* Contenido de fondo: video real si existe, si no simulado */}
+            {videoSrc ? (
+              <video
+                key={cam.id}
+                src={videoSrc}
+                autoPlay
+                muted
+                playsInline
+                style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', zIndex: 1 }}
+              />
+            ) : (
+              <div style={{
+                position: 'absolute', inset: 0, zIndex: 1,
+                background: `linear-gradient(135deg, #0a1a14 0%, #1a3028 40%, #0f2019 100%)`,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+              }}>
+                <div style={{ textAlign: 'center', opacity: 0.2 }}>
+                  <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#02735E" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/>
+                  </svg>
+                  <p style={{ fontSize: 9, color: '#02735E', marginTop: 6, letterSpacing: '0.1em', fontWeight: 600 }}>FEED EN VIVO</p>
+                </div>
               </div>
-            </div>
+            )}
             {/* Marca de tiempo simulada */}
             <div style={{ position: 'absolute', top: 8, left: 10, zIndex: 4, fontFamily: 'monospace', fontSize: 9.5, color: 'rgba(214,217,137,0.8)', letterSpacing: '0.04em' }}>
               {new Date().toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit', second: '2-digit' })} CDT
@@ -61,9 +93,17 @@ function CamFeed({ cam }) {
       </div>
 
       {/* Info de cámara */}
-      <div style={{ padding: '6px 2px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <div>
-          <span style={{ fontSize: 11, fontWeight: 700, color: '#1A202C', display: 'block' }}>{cam.name}</span>
+      <div style={{ padding: '6px 2px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8 }}>
+        <div style={{ minWidth: 0 }}>
+          <span style={{ fontSize: 11, fontWeight: 700, color: '#1A202C', display: 'flex', alignItems: 'center', gap: 5 }}>
+            {cam.name}
+            {cam.type && <span style={{ fontSize: 8.5, fontWeight: 800, color: '#02735E', background: 'rgba(2,115,94,0.10)', padding: '1px 6px', borderRadius: 8, textTransform: 'uppercase', letterSpacing: '0.04em' }}>{CAM_TYPE_LABEL[cam.type] ?? cam.type}</span>}
+            {WEAPON_DETECTION_CAMERAS.includes(cam.id) && (
+              <span title="Detección de armas por postura" style={{ display: 'flex', alignItems: 'center', color: '#9B2C2C' }}>
+                <IconWeapon size={11} />
+              </span>
+            )}
+          </span>
           <span style={{ fontSize: 10, color: '#718096' }}>{cam.zone}</span>
         </div>
         <div style={{
@@ -110,18 +150,17 @@ function ProviderCamera() {
       <div className="cam-feed" style={{ aspectRatio: '16/7' }}>
         <div className="cam-noise" />
         <div className="cam-scanline" />
+        <video
+          src={vidZonaCarga}
+          autoPlay
+          muted
+          playsInline
+          style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', zIndex: 1 }}
+        />
         <div style={{
-          position: 'absolute', inset: 0, zIndex: 1,
-          background: 'linear-gradient(135deg, #0a1a14 0%, #152a20 100%)',
-          display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: 10
+          position: 'absolute', inset: 0, zIndex: 2,
+          display: 'flex', alignItems: 'flex-end', justifyContent: 'center', paddingBottom: 8,
         }}>
-          {/* Simulación de zona de carga */}
-          <div style={{ opacity: 0.15, textAlign: 'center' }}>
-            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#02735E" strokeWidth="0.8">
-              <rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/>
-            </svg>
-            <p style={{ fontSize: 8.5, color: '#02735E', marginTop: 4, letterSpacing: '0.12em', fontWeight: 600 }}>ZONA DE CARGA — ACCESO B</p>
-          </div>
           {/* Alert overlay para vehículo desconocido */}
           <div style={{ background: 'rgba(197,48,48,0.15)', border: '1px solid rgba(197,48,48,0.4)', borderRadius: 8, padding: '6px 12px', display: 'flex', alignItems: 'center', gap: 8 }}>
             <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#C53030', animation: 'pulse 1.2s ease-in-out infinite', flexShrink: 0 }} />
@@ -188,6 +227,19 @@ export default function Vigilancia() {
         <p style={sv.sectionHead}>Grid de Cámaras CCTV</p>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: 14 }}>
           {CAMERAS.map(cam => <CamFeed key={cam.id} cam={cam} />)}
+        </div>
+      </div>
+
+      {/* Capacidades de detección IA */}
+      <div className="hud-panel lift" style={{ padding: 16 }}>
+        <p style={sv.sectionHead}>Detección IA activa en el sitio</p>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(230px, 1fr))', gap: 10 }}>
+          {AI_DETECTION_CAPABILITIES.map(d => (
+            <div key={d.id} style={{ padding: '10px 12px', borderRadius: 10, background: 'rgba(2,115,94,0.04)', border: '1px solid rgba(2,115,94,0.12)' }}>
+              <span style={{ fontSize: 11.5, fontWeight: 700, color: '#1A202C', display: 'block', marginBottom: 3 }}>{d.label}</span>
+              <span style={{ fontSize: 10.5, color: '#718096', lineHeight: 1.4 }}>{d.detail}</span>
+            </div>
+          ))}
         </div>
       </div>
 

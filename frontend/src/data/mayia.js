@@ -18,10 +18,10 @@ export function mayiaInsights() {
 
   const list = [
     {
-      id: 'cam-offline', section: 'vigilancia', kind: 'alerta',
-      title: 'Cámara 4 — Acceso Norte sin señal',
-      detail: 'La cámara del acceso norte lleva 14 minutos sin transmitir. Verificar conexión o posible obstrucción deliberada.',
-      plan: { label: 'Enviar técnico a revisar cámara 4', ok: 'Enviar' },
+      id: 'weapon-posture', section: 'vigilancia', kind: 'alerta',
+      title: 'Cámara 8 — postura de ocultamiento de arma',
+      detail: 'IA detectó a un individuo agachándose y ocultando un objeto bajo la ropa en Área de Proveedores. Requiere verificación inmediata.',
+      plan: { label: 'Enviar equipo de seguridad a Acceso C', ok: 'Enviar' },
     },
     {
       id: 'placa-desconocida', section: 'seguridad', kind: 'alerta',
