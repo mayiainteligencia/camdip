@@ -57,14 +57,9 @@ export default function AppLayout() {
 
       <div className="main-area">
         {!isMobile && (
-          <>
-            <div className="header-edge-logo left">
-              <img src={logoFspm} alt="FSPM" />
-            </div>
-            <div className="header-edge-logo right">
-              <img src={logoMayia} alt="MAYIA" />
-            </div>
-          </>
+          <div className="header-edge-logo left">
+            <img src={logoFspm} alt="FSPM" />
+          </div>
         )}
         <Header
           title={meta.title}
@@ -73,6 +68,11 @@ export default function AppLayout() {
           isMobile={isMobile}
           onToggle={toggleSidebar}
         />
+        {!isMobile && (
+          <div className="header-edge-logo right">
+            <img src={logoMayia} alt="MAYIA" />
+          </div>
+        )}
         <main className="content">
           <Outlet />
         </main>

@@ -95,33 +95,35 @@ input, select, textarea { font-family: inherit; }
   animation: notchDrop 0.5s cubic-bezier(0.34,1.56,0.64,1) both;
 }
 
-/* ─── Logos en los extremos del header (fuera del notch) ─────── */
+/* ─── Logos pegados a las orillas del área principal ──────────── */
 .header-edge-logo {
   position: absolute;
   top: 12px;
+  width: 84px;
   height: 56px;
-  z-index: 190;
+  z-index: 200;
   display: flex;
   align-items: center;
-  border-radius: 20px;
-  padding: 0 16px;
+  justify-content: center;
+  border-radius: 16px;
+  padding: 8px;
   box-shadow: 0 4px 20px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.05);
   animation: notchDrop 0.5s cubic-bezier(0.34,1.56,0.64,1) both;
 }
-.header-edge-logo img { height: 60%; width: auto; object-fit: contain; display: block; }
+.header-edge-logo img { max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; display: block; }
 .header-edge-logo.left {
-  left: 16px;
+  left: 130px;
   background: rgba(255, 255, 255, 0.92);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid rgba(2,115,94,0.10);
 }
 .header-edge-logo.right {
-  right: 16px;
+  right: 40px;
   background: linear-gradient(135deg, #14140f 0%, #000000 100%);
   border: 1px solid rgba(255,255,255,0.08);
 }
-@media (max-width: 1200px) {
+@media (max-width: 1300px) {
   .header-edge-logo { display: none; }
 }
 

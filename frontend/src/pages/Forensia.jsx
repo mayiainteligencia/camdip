@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { MayiaPanel } from '@/components/ui/Mayia'
 import { IconUser, IconSearch } from '@/components/ui/Icons'
 
@@ -14,13 +14,34 @@ const MOCK_SIGHTINGS = [
 /* ── Búsqueda de persona/objeto: escanea red de cámaras ────────────── */
 function PersonObjectSearch() {
   const [query, setQuery] = useState('')
+  const [image, setImage] = useState(null) // { url, name }
   const [scanning, setScanning] = useState(false)
   const [progress, setProgress] = useState(0)
   const [result, setResult] = useState(null)
+  const fileInputRef = useRef(null)
+
+  useEffect(() => {
+    return () => { if (image?.url) URL.revokeObjectURL(image.url) }
+  }, [image])
+
+  const handleFileChange = (e) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    if (image?.url) URL.revokeObjectURL(image.url)
+    setImage({ url: URL.createObjectURL(file), name: file.name })
+    e.target.value = ''
+  }
+
+  const removeImage = () => {
+    if (image?.url) URL.revokeObjectURL(image.url)
+    setImage(null)
+  }
+
+  const canScan = (query.trim() || image) && !scanning
 
   const handleScan = (e) => {
     e.preventDefault()
-    if (!query.trim() || scanning) return
+    if (!canScan) return
     setScanning(true)
     setProgress(0)
     setResult(null)
@@ -31,8 +52,8 @@ function PersonObjectSearch() {
       if (p >= 100) {
         clearInterval(interval)
         setScanning(false)
-        const hash = query.split('').reduce((a, c) => a + c.charCodeAt(0), 0)
-        setResult(MOCK_SIGHTINGS[hash % MOCK_SIGHTINGS.length])
+        const seed = (query + (image?.name ?? '')).split('').reduce((a, c) => a + c.charCodeAt(0), 0)
+        setResult(MOCK_SIGHTINGS[seed % MOCK_SIGHTINGS.length])
       }
     }, 120)
   }
@@ -44,19 +65,37 @@ function PersonObjectSearch() {
         Búsqueda de Persona / Objeto
       </p>
       <p style={{ fontSize: 11, color: '#718096', marginBottom: 12 }}>
-        Describe a la persona u objeto y MAYIA escanea la red de cámaras para decirte cuándo y dónde se vio por última vez.
+        Describe a la persona u objeto, o adjunta una foto de referencia. MAYIA escanea la red de cámaras para decirte cuándo y dónde se vio por última vez.
       </p>
 
-      <form onSubmit={handleScan} style={{ display: 'flex', gap: 8, marginBottom: 12 }}>
-        <input
-          value={query}
-          onChange={e => setQuery(e.target.value)}
-          placeholder="Ej: hombre chamarra roja, maleta negra…"
-          style={ss.searchInput}
-        />
-        <button type="submit" disabled={scanning || !query.trim()} style={{ ...ss.btnAction, width: 'auto', padding: '10px 16px', opacity: scanning || !query.trim() ? 0.5 : 1 }}>
-          {scanning ? 'Escaneando…' : 'Escanear'}
-        </button>
+      <form onSubmit={handleScan} style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 12 }}>
+        <div style={{ display: 'flex', gap: 8 }}>
+          <input
+            value={query}
+            onChange={e => setQuery(e.target.value)}
+            placeholder="Ej: hombre chamarra roja, maleta negra…"
+            style={ss.searchInput}
+          />
+          <button type="submit" disabled={!canScan} style={{ ...ss.btnAction, width: 'auto', padding: '10px 16px', opacity: canScan ? 1 : 0.5 }}>
+            {scanning ? 'Escaneando…' : 'Escanear'}
+          </button>
+        </div>
+
+        <input ref={fileInputRef} type="file" accept="image/*" onChange={handleFileChange} style={{ display: 'none' }} />
+
+        {image ? (
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, background: 'rgba(0,0,0,0.03)', borderRadius: 8, padding: '6px 10px' }}>
+            <img src={image.url} alt="Referencia adjunta" style={{ width: 36, height: 36, borderRadius: 6, objectFit: 'cover', flexShrink: 0 }} />
+            <span style={{ fontSize: 11, color: '#4A5568', flex: 1, minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{image.name}</span>
+            <button type="button" onClick={removeImage} style={{ fontSize: 11, fontWeight: 700, color: '#C53030', background: 'none', border: 'none', cursor: 'pointer', flexShrink: 0 }}>
+              Quitar
+            </button>
+          </div>
+        ) : (
+          <button type="button" onClick={() => fileInputRef.current?.click()} style={{ ...ss.btnOutline, width: 'auto', alignSelf: 'flex-start', padding: '7px 14px', fontSize: 11 }}>
+            📎 Adjuntar imagen de referencia
+          </button>
+        )}
       </form>
 
       <div style={{
@@ -64,9 +103,13 @@ function PersonObjectSearch() {
         background: '#0a1a14', display: 'flex', alignItems: 'center', justifyContent: 'center',
         border: '1px solid rgba(2,115,94,0.20)', marginBottom: (scanning || result) ? 12 : 0,
       }}>
-        <span style={{ color: scanning ? '#02735E' : 'rgba(2,115,94,0.35)', transition: 'color 0.2s' }}>
-          <IconUser size={36} />
-        </span>
+        {image ? (
+          <img src={image.url} alt="Referencia" style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: scanning ? 0.6 : 0.85 }} />
+        ) : (
+          <span style={{ color: scanning ? '#02735E' : 'rgba(2,115,94,0.35)', transition: 'color 0.2s' }}>
+            <IconUser size={36} />
+          </span>
+        )}
         {scanning && <div className="cam-scanline" />}
         {scanning && (
           <span style={{ position: 'absolute', bottom: 6, right: 8, display: 'flex', alignItems: 'center', gap: 4, color: '#02735E' }}>
